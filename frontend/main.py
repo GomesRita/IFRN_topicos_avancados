@@ -1,5 +1,9 @@
-from sistema_bancario import SistemaBancario
+import sys
+import os
 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from backend.sistema_bancario import SistemaBancario
 sistema = SistemaBancario()
 
 def menu():
