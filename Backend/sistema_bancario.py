@@ -14,7 +14,7 @@ class SistemaBancario:
             self.contas[numero] = Conta(numero)
             print(f"Conta {numero} cadastrada com sucesso.")
 
-def realizar_credito(self, numero, valor):
+    def realizar_credito(self, numero, valor):
         conta = self.contas.get(numero)
         if conta:
             conta.saldo += valor
@@ -22,7 +22,7 @@ def realizar_credito(self, numero, valor):
         else:
             print("Conta não encontrada.")
 
-def realizar_debito(self, numero, valor):
+    def realizar_debito(self, numero, valor):
         conta = self.contas.get(numero)
         if conta:
             conta.saldo -= valor
