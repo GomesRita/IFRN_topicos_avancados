@@ -21,7 +21,6 @@ class SistemaBancario:
     def __init__(self):
         self.contas = {}
 
-<<<<<<< HEAD
     def cadastrar_conta(self, numero, opcaoConta):
         if opcaoConta == '1':
             if numero in self.contas:
@@ -39,24 +38,24 @@ class SistemaBancario:
                 contaBonus = self.contas.get(numero)
                 contaBonus.pontuacao += 10
                 print(f"Conta {numero} cadastrada com sucesso.")
-
-   def realizar_credito(self, numero, valor):
-       conta = self.contas.get(numero)
-       if conta:
-           if valor > 0:
-               conta.saldo += valor
-               print(f"Crédito de R${valor:.2f} realizado na conta {numero}.")
-           else:
-               print('Informe um valor válido, operação não realizada')
-       else:
-           print("Conta não encontrada.")
-
+        
         if opcaoConta == '3':  # Conta Poupança
             if numero in self.contas:
                 print("Conta já cadastrada.")
             else:
                 self.contas[numero] = ContaPoupanca(numero)
                 print(f"Conta {numero} cadastrada com sucesso.")
+
+    def realizar_credito(self, numero, valor):
+        conta = self.contas.get(numero)
+        if conta:
+           if valor > 0:
+               conta.saldo += valor
+               print(f"Crédito de R${valor:.2f} realizado na conta {numero}.")
+           else:
+               print('Informe um valor válido, operação não realizada')
+        else:
+           print("Conta não encontrada.")
 
     # Nova operação: Render Juros
     def render_juros(self, numero, taxa):
