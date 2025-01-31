@@ -28,8 +28,8 @@ class SistemaBancario:
             else:
                 self.contas[numero] = Conta(numero)
                 conta = self.contas.get(numero)
-           conta.saldo += float(saldoInicial)
-           print(f"Conta {numero} cadastrada com sucesso.")
+                conta.saldo += float(saldoInicial)
+                print(f"Conta {numero} cadastrada com sucesso.")
         if opcaoConta == '2':
             if numero in self.contas:
                 print("Conta já cadastrada.")
