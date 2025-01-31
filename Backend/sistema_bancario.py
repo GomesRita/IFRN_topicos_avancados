@@ -105,8 +105,8 @@ class SistemaBancario:
             else:
                 if isinstance(conta_destino, ContaBonus):
                     conta_destino.somadorTransferencia += valor
-                    if conta_destino.somadorTransferencia >= 200:
-                        conta_destino.pontuacao +=valor // 200;
+                    if conta_destino.somadorTransferencia >= 150:
+                        conta_destino.pontuacao +=valor // 150;
                         conta_origem.saldo -= valor
                         conta_destino.saldo += valor
                         print(f"Transferência de R${valor:.2f} realizada da conta {origem} para a conta {destino}.")
