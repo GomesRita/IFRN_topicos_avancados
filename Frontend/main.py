@@ -21,7 +21,8 @@ def menu():
 
         if opcao == "1":
             numero = input("Informe o número da conta: ")
-            sistema.cadastrar_conta(numero)
+            saldoInicial = input("Informe saldo inicial para abrir a conta: ")
+            sistema.cadastrar_conta(numero, saldoInicial)
         elif opcao == "2":
             numero = input("Informe o número da conta: ")
             sistema.consultar_saldo(numero)

@@ -8,11 +8,13 @@ class SistemaBancario:
    def __init__(self):
        self.contas = {}
 
-   def cadastrar_conta(self, numero):
+   def cadastrar_conta(self, numero, saldoInicial):
        if numero in self.contas:
            print("Conta já cadastrada.")
        else:
            self.contas[numero] = Conta(numero)
+           conta = self.contas.get(numero)
+           conta.saldo += saldoInicial
            print(f"Conta {numero} cadastrada com sucesso.")
           
    #Simule a correção do bug abaixo e estabeleça um nova baseline (rc-1.3) após sua
