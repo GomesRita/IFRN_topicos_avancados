@@ -1,73 +1,136 @@
-class Conta:
-   def __init__(self, numero):
-       self.numero = numero;
-       self.saldo = 0.0;
+class Conta: #Conta Simples
+    def __init__(self, numero):
+        self.numero = numero;
+        self.saldo = 0.0;
+
+class ContaBonus:
+    def __init__(self, numero):
+        self.numero = numero;
+        self.saldo = 0.0;
+        self.pontuacao = 0.0;
+        self.somadorDeposito = 0.0;
+        self.somadorTransferencia = 0.0;
+
+class ContaPoupanca:  # Nova classe: Conta Poupança
+    def __init__(self, numero):
+        self.numero = numero
+        self.saldo = 0.0
 
 
 class SistemaBancario:
-   def __init__(self):
-       self.contas = {}
+    def __init__(self):
+        self.contas = {}
 
-   def cadastrar_conta(self, numero):
-       if numero in self.contas:
-           print("Conta já cadastrada.")
-       else:
-           self.contas[numero] = Conta(numero)
-           print(f"Conta {numero} cadastrada com sucesso.")
-          
-   #Simule a correção do bug abaixo e estabeleça um nova baseline (rc-1.3) após sua
-   #correção, que será novamente validada.
-   def realizar_credito(self, numero, valor):
-       conta = self.contas.get(numero)
-       if conta:
-           if valor > 0:
-               conta.saldo += valor
-               print(f"Crédito de R${valor:.2f} realizado na conta {numero}.")
-           else:
-               print('Informe um valor válido, operação não realizada')
-       else:
-           print("Conta não encontrada.")
+    def cadastrar_conta(self, numero, opcaoConta):
+        if opcaoConta == '1':
+            if numero in self.contas:
+                print("Conta já cadastrada.")
+            else:
+                self.contas[numero] = Conta(numero)
+                print(f"Conta {numero} cadastrada com sucesso.")
+        if opcaoConta == '2':
+            if numero in self.contas:
+                print("Conta já cadastrada.")
+            else:
+                self.contas[numero] = ContaBonus(numero)
+                contaBonus = self.contas.get(numero)
+                contaBonus.pontuacao += 10
+                print(f"Conta {numero} cadastrada com sucesso.")
 
+        if opcaoConta == '3':  # Conta Poupança
+            if numero in self.contas:
+                print("Conta já cadastrada.")
+            else:
+                self.contas[numero] = ContaPoupanca(numero)
+                print(f"Conta {numero} cadastrada com sucesso.")
 
-   #As operações de débito e transferência não podem ser realizadas caso a conta
-   #origem não tenha saldo suficiente (Não deve permitir saldo negativo);
-   def realizar_debito(self, numero, valor):
-       conta = self.contas.get(numero)
+    # Nova operação: Render Juros
+    def render_juros(self, numero, taxa):
+        conta = self.contas.get(numero)
+        if conta:
+            if isinstance(conta, ContaPoupanca):
+                if taxa > 0:
+                    juros = conta.saldo * (taxa / 100)
+                    conta.saldo += juros
+                    print(f"Juros de R${juros:.2f} aplicados na conta {numero}. Novo saldo: R${conta.saldo:.2f}")
+                else:
+                    print("Taxa de juros inválida. Informe um valor positivo.")
+            else:
+                print("Esta operação é permitida apenas para contas poupança.")
+        else:
+            print("Conta não encontrada.")
 
-       if conta:
-           if valor > 0:
-               if conta.saldo < valor:
-                   print('Saldo insuficiente, operação cancelada');
-               else:
-                   conta.saldo -= valor
-                   print(f"Débito de R${valor:.2f} realizado na conta {numero}.");
-           else:
-               print('Informe um valor válido, operação não realizada')
-       else:
-           print("Conta não encontrada.")
-          
-   def realizar_transferencia(self, origem, destino, valor):
-       conta_origem = self.contas.get(origem)
-       conta_destino = self.contas.get(destino)
         
-       if conta_origem and conta_destino:
-           if valor > 0:
-               if conta_origem.saldo < valor:
-                   print('Saldo insuficiente, operação cancelada');
-               else:
-                   conta_origem.saldo -= valor
-                   conta_destino.saldo += valor
-                   print(f"Transferência de R${valor:.2f} realizada da conta {origem} para a conta {destino}.")
-           else:
-               print('Informe um valor válido, operação não realizada')
-       else:
-           print("Conta de origem ou destino não encontrada.")
+    def realizar_credito(self, numero, valor):
+        conta = self.contas.get(numero);
+        if conta:
+            if valor > 0:
+                if isinstance(conta, ContaBonus):
+                    conta.somadorDeposito += valor;
+                    if conta.somadorDeposito >= 100:
+                        conta.pontuacao +=valor // 100;
+                        conta.saldo += valor;
+                        print(f"Crédito de R${valor:.2f} realizado na conta {numero}.");
+                        conta.somadorDeposito == 0;
+                else:
+                    conta.saldo += valor
+                    print(f"Crédito de R${valor:.2f} realizado na conta {numero}.")
+            else:
+                print('Informe um valor válido, operação não realizada')
+
+        else:
+            print("Conta não encontrada.")
 
 
-   def consultar_saldo(self, numero):
-       conta = self.contas.get(numero)
-       if conta:
-           print(f"Saldo da conta {numero}: R${conta.saldo:.2f}")
-       else:
-           print("Conta não encontrada.")
+    def realizar_debito(self, numero, valor):
+        conta = self.contas.get(numero)
 
+        if conta:
+            if conta.saldo < valor:
+                print('Saldo insuficiente, operação cancelada');
+            else:
+                conta.saldo -= valor
+                print(f"Débito de R${valor:.2f} realizado na conta {numero}.");
+        else:
+            print("Conta não encontrada.")
+        
+    def realizar_transferencia(self, origem, destino, valor):
+        conta_origem = self.contas.get(origem)
+        conta_destino = self.contas.get(destino)
+
+
+        if conta_origem and conta_destino:
+            if conta_origem.saldo < valor:
+                print('Saldo insuficiente, operação cancelada');
+            else:
+                if isinstance(conta_destino, ContaBonus):
+                    conta_destino.somadorTransferencia += valor
+                    if conta_destino.somadorTransferencia >= 200:
+                        conta_destino.pontuacao +=valor // 200;
+                        conta_origem.saldo -= valor
+                        conta_destino.saldo += valor
+                        print(f"Transferência de R${valor:.2f} realizada da conta {origem} para a conta {destino}.")
+                else:
+                    conta_origem.saldo -= valor
+                    conta_destino.saldo += valor
+                    print(f"Transferência de R${valor:.2f} realizada da conta {origem} para a conta {destino}.")
+        else:
+            print("Conta de origem ou destino não encontrada.")
+
+
+    def consultar_saldo(self, numero):
+        conta = self.contas.get(numero)
+        if conta:
+            print(f"Saldo da conta {numero}: R${conta.saldo:.2f}")
+        else:
+            print("Conta não encontrada.")
+
+    def consultar_pontuacao(self, numero):
+        contaBonus = self.contas.get(numero)
+        if contaBonus:
+            if isinstance(contaBonus, ContaBonus):
+                print(f"Pontuacao da conta {numero}: R${contaBonus.pontuacao:.2f}")
+            else:
+                print("Sua conta não é do tipo conta bônus")
+        else:
+            print("Conta não encontrada.")
