@@ -1,15 +1,11 @@
 import sys
 import os
 
-
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../Backend")));
-
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../Backend")))
 
 from sistema_bancario import SistemaBancario
 
-
 sistema = SistemaBancario()
-
 
 def menu():
     while True:
@@ -22,18 +18,20 @@ def menu():
         print("6. Realizar Transferência")
         print("7. Sair")
 
-
         opcao = input("Escolha uma opção: ")
-
 
         if opcao == "1":
             opcaoConta = input('''Informe o tipo de conta:
                 1. Conta Simples
                 2. Conta Bônus
                 3. Conta Poupança
-            ''');
+            ''')
             numero = input("Informe o número da conta: ")
-            sistema.cadastrar_conta(numero, opcaoConta)
+            if opcaoConta == '3':
+                saldo_inicial = float(input("Informe o saldo inicial da conta poupança: "))
+                sistema.cadastrar_conta(numero, opcaoConta, saldo_inicial)
+            else:
+                sistema.cadastrar_conta(numero, opcaoConta)
         elif opcao == "2":
             numero = input("Informe o número da conta: ")
             sistema.consultar_saldo(numero)
@@ -58,7 +56,6 @@ def menu():
             break
         else:
             print("Opção inválida. Tente novamente.")
-
 
 if __name__ == "__main__":
     menu()
