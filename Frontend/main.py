@@ -30,6 +30,7 @@ def menu():
             opcaoConta = input('''Informe o tipo de conta:
                 1. Conta Simples
                 2. Conta Bônus
+                3. Conta Poupança
             ''');
             numero = input("Informe o número da conta: ")
             sistema.cadastrar_conta(numero, opcaoConta)
@@ -61,5 +62,3 @@ def menu():
 
 if __name__ == "__main__":
     menu()
-
-
