@@ -33,7 +33,8 @@ def menu():
                 3. Conta Poupança
             ''');
             numero = input("Informe o número da conta: ")
-            sistema.cadastrar_conta(numero, opcaoConta)
+            saldoInicial = input("Informe saldo inicial para abrir a conta: ")
+            sistema.cadastrar_conta(numero, opcaoConta, saldoInicial)
         elif opcao == "2":
             numero = input("Informe o número da conta: ")
             sistema.consultar_saldo(numero)
