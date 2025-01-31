@@ -8,7 +8,6 @@ class SistemaBancario:
    def __init__(self):
        self.contas = {}
 
-
    def cadastrar_conta(self, numero):
        if numero in self.contas:
            print("Conta já cadastrada.")
@@ -35,7 +34,6 @@ class SistemaBancario:
    def realizar_debito(self, numero, valor):
        conta = self.contas.get(numero)
 
-
        if conta:
            if valor > 0:
                if conta.saldo < valor:
@@ -51,8 +49,7 @@ class SistemaBancario:
    def realizar_transferencia(self, origem, destino, valor):
        conta_origem = self.contas.get(origem)
        conta_destino = self.contas.get(destino)
-
-
+        
        if conta_origem and conta_destino:
            if valor > 0:
                if conta_origem.saldo < valor:
@@ -73,3 +70,4 @@ class SistemaBancario:
            print(f"Saldo da conta {numero}: R${conta.saldo:.2f}")
        else:
            print("Conta não encontrada.")
+
