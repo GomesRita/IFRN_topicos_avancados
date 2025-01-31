@@ -14,7 +14,7 @@ class SistemaBancario:
        else:
            self.contas[numero] = Conta(numero)
            conta = self.contas.get(numero)
-           conta.saldo += saldoInicial
+           conta.saldo += float(saldoInicial)
            print(f"Conta {numero} cadastrada com sucesso.")
           
    #Simule a correção do bug abaixo e estabeleça um nova baseline (rc-1.3) após sua
