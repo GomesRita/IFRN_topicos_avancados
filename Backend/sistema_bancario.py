@@ -21,12 +21,14 @@ class SistemaBancario:
     def __init__(self):
         self.contas = {}
 
-    def cadastrar_conta(self, numero, opcaoConta):
+    def cadastrar_conta(self, numero, opcaoConta, saldoInicial):
         if opcaoConta == '1':
             if numero in self.contas:
                 print("Conta já cadastrada.")
             else:
                 self.contas[numero] = Conta(numero)
+                conta = self.contas.get(numero)
+                conta.saldo += float(saldoInicial)
                 print(f"Conta {numero} cadastrada com sucesso.")
         if opcaoConta == '2':
             if numero in self.contas:
