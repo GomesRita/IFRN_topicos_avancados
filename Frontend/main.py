@@ -16,7 +16,8 @@ def menu():
         print("4. Realizar Crédito")
         print("5. Realizar Débito")
         print("6. Realizar Transferência")
-        print("7. Sair")
+        print("7. Render Juros")
+        print("8. Sair")
 
         opcao = input("Escolha uma opção: ")
 
@@ -28,6 +29,7 @@ def menu():
             ''')
             numero = input("Informe o número da conta: ")
 <<<<<<< HEAD
+<<<<<<< HEAD
             saldoInicial = input("Informe saldo inicial para abrir a conta: ")
             sistema.cadastrar_conta(numero, opcaoConta, saldoInicial)
 =======
@@ -37,6 +39,10 @@ def menu():
             else:
                 sistema.cadastrar_conta(numero, opcaoConta)
 >>>>>>> 06201050be02cee6c7d37c9aa80211dde869a587
+=======
+            saldoInicial = input("Informe saldo inicial para abrir a conta: ")
+            sistema.cadastrar_conta(numero, opcaoConta, saldoInicial)
+>>>>>>> hotfix-corrigeRenderJuros
         elif opcao == "2":
             numero = input("Informe o número da conta: ")
             sistema.consultar_saldo(numero)
@@ -57,6 +63,10 @@ def menu():
             valor = float(input("Informe o valor da transferência: "))
             sistema.realizar_transferencia(origem, destino, valor)
         elif opcao == "7":
+            numero = input("Informe o número da conta: ")
+            taxa = input("Informe a taxa de juros: ")
+            sistema.render_juros(numero, taxa)
+        elif opcao == "8":
             print("Saindo do sistema...")
             break
         else:

@@ -47,23 +47,35 @@ class SistemaBancario:
                 self.contas[numero] = ContaBonus(numero)
                 contaBonus = self.contas.get(numero)
                 contaBonus.pontuacao += 10
+                contaBonus.saldo += float(saldoInicial)
                 print(f"Conta {numero} cadastrada com sucesso.")
-        elif opcaoConta == '3':  # Conta Poupança
+        
+        if opcaoConta == '3':  # Conta Poupança
             if numero in self.contas:
                 print("Conta já cadastrada.")
             else:
-                if saldo_inicial is not None and saldo_inicial >= 0:
-                    self.contas[numero] = ContaPoupanca(numero, saldo_inicial)
-                    print(f"Conta {numero} cadastrada com sucesso.")
-                else:
-                    print("Saldo inicial inválido. Informe um valor positivo.")
+                self.contas[numero] = ContaPoupanca(numero)
+                contaPoupanca = self.contas.get(numero)
+                contaPoupanca.saldo += float(saldoInicial)
+                print(f"Conta {numero} cadastrada com sucesso.")
+
+    def realizar_credito(self, numero, valor):
+        conta = self.contas.get(numero)
+        if conta:
+           if valor > 0:
+               conta.saldo += valor
+               print(f"Crédito de R${valor:.2f} realizado na conta {numero}.")
+           else:
+               print('Informe um valor válido, operação não realizada')
+        else:
+           print("Conta não encontrada.")
 
     def render_juros(self, numero, taxa):
         conta = self.contas.get(numero)
         if conta:
             if isinstance(conta, ContaPoupanca):
-                if taxa > 0:
-                    juros = conta.saldo * (taxa / 100)
+                if float(taxa) > 0:
+                    juros = conta.saldo * (float(taxa) / 100)
                     conta.saldo += juros
                     print(f"Juros de R${juros:.2f} aplicados na conta {numero}. Novo saldo: R${conta.saldo:.2f}")
                 else:
@@ -115,18 +127,13 @@ class SistemaBancario:
         conta_destino = self.contas.get(destino)
 
         if conta_origem and conta_destino:
-            if isinstance(conta_origem, (Conta, ContaBonus)):
-                if not conta_origem.verificar_limite(valor):
-                    print('Limite de saldo negativo excedido, operação cancelada')
-                else:
-                    if isinstance(conta_destino, ContaBonus):
-                        conta_destino.somadorTransferencia += valor
-                        if conta_destino.somadorTransferencia >= 200:
-                            conta_destino.pontuacao += valor // 200
-                            conta_origem.saldo -= valor
-                            conta_destino.saldo += valor
-                            print(f"Transferência de R${valor:.2f} realizada da conta {origem} para a conta {destino}.")
-                    else:
+            if conta_origem.saldo < valor:
+                print('Saldo insuficiente, operação cancelada');
+            else:
+                if isinstance(conta_destino, ContaBonus):
+                    conta_destino.somadorTransferencia += valor
+                    if conta_destino.somadorTransferencia >= 150:
+                        conta_destino.pontuacao +=valor // 150;
                         conta_origem.saldo -= valor
                         conta_destino.saldo += valor
                         print(f"Transferência de R${valor:.2f} realizada da conta {origem} para a conta {destino}.")
