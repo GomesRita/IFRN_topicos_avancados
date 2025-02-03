@@ -21,7 +21,7 @@ class SistemaBancario:
     def __init__(self):
         self.contas = {}
 
-    def cadastrar_conta(self, numero, opcaoConta):
+    def cadastrar_conta(self, numero, opcaoConta, saldoInicial):
         if opcaoConta == '1':
             if numero in self.contas:
                 print("Conta já cadastrada.")
@@ -37,6 +37,7 @@ class SistemaBancario:
                 self.contas[numero] = ContaBonus(numero)
                 contaBonus = self.contas.get(numero)
                 contaBonus.pontuacao += 10
+                contaBonus.saldo += float(saldoInicial)
                 print(f"Conta {numero} cadastrada com sucesso.")
         
         if opcaoConta == '3':  # Conta Poupança
@@ -44,6 +45,8 @@ class SistemaBancario:
                 print("Conta já cadastrada.")
             else:
                 self.contas[numero] = ContaPoupanca(numero)
+                contaPoupanca = self.contas.get(numero)
+                contaPoupanca.saldo += float(saldoInicial)
                 print(f"Conta {numero} cadastrada com sucesso.")
 
     def realizar_credito(self, numero, valor):
@@ -62,8 +65,8 @@ class SistemaBancario:
         conta = self.contas.get(numero)
         if conta:
             if isinstance(conta, ContaPoupanca):
-                if taxa > 0:
-                    juros = conta.saldo * (taxa / 100)
+                if float(taxa) > 0:
+                    juros = conta.saldo * (float(taxa) / 100)
                     conta.saldo += juros
                     print(f"Juros de R${juros:.2f} aplicados na conta {numero}. Novo saldo: R${conta.saldo:.2f}")
                 else:
