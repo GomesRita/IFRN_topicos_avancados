@@ -1,22 +1,95 @@
-import sys
-import os
+import requests
 
+API_URL = "http://127.0.0.1:5000"
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../Backend")));
+def obter_numero_conta():
+    return input("Informe o número da conta: ")
 
+def cadastrar_conta():
+    opcaoConta = input('''Informe o tipo de conta:
+        1. Conta Simples
+        2. Conta Bônus
+        3. Conta Poupança
+    ''')
+    numero = obter_numero_conta()
+    saldoInicial = input("Informe saldo inicial para abrir a conta: ")
+    response = requests.post(f"{API_URL}/cadastrar_conta", json={
+        "numero": numero,
+        "tipo_conta": opcaoConta,
+        "saldo_inicial": saldoInicial
+    })
+    print(response.json()['message'])
 
-from sistema_bancario import SistemaBancario
+def consultar_saldo():
+    numero = obter_numero_conta()
+    response = requests.get(f"{API_URL}/consultar_saldo/{numero}")
+    print(response.json()['message'])
 
+def consultar_pontuacao():
+    numero = obter_numero_conta()
+    response = requests.get(f"{API_URL}/consultar_pontuacao/{numero}")
+    print(response.json()['message'])
 
-sistema = SistemaBancario()
+def realizar_credito():
+    numero = obter_numero_conta()
+    valor = float(input("Informe o valor do crédito: "))
+    response = requests.post(f"{API_URL}/realizar_credito", json={
+        "numero": numero,
+        "valor": valor
+    })
+    print(response.json()['message'])
 
+def realizar_debito():
+    numero = obter_numero_conta()
+    valor = float(input("Informe o valor do débito: "))
+    response = requests.post(f"{API_URL}/realizar_debito", json={
+        "numero": numero,
+        "valor": valor
+    })
+    print(response.json()['message'])
+
+def realizar_transferencia():
+    origem = obter_numero_conta()
+    destino = input("Informe o número da conta de destino: ")
+    valor = float(input("Informe o valor da transferência: "))
+    response = requests.post(f"{API_URL}/realizar_transferencia", json={
+        "origem": origem,
+        "destino": destino,
+        "valor": valor
+    })
+    print(response.json()['message'])
+
+def render_juros():
+    numero = obter_numero_conta()
+    taxa = input("Informe a taxa de juros: ")
+    response = requests.post(f"{API_URL}/render_juros", json={
+        "numero": numero,
+        "taxa": taxa
+    })
+    print(response.json()['message'])
+
+def consultar_dados_conta():
+    numero = obter_numero_conta()
+    response = requests.get(f"{API_URL}/consultar_dados_conta/{numero}")
+    print(response.json()['message'])
 
 def menu():
+    opcoes = {
+        "1": cadastrar_conta,
+        "2": consultar_saldo,
+        "3": consultar_pontuacao,
+        "4": realizar_credito,
+        "5": realizar_debito,
+        "6": realizar_transferencia,
+        "7": render_juros,
+        "8": consultar_dados_conta,
+    }
+
     while True:
         print("\n--- Sistema Bancário ---")
         print("1. Cadastrar Conta")
         print("2. Consultar Saldo")
-        print("3. Consultar Pontuacao")
+        print("3. Consultar Pontuação")
         print("4. Realizar Crédito")
         print("5. Realizar Débito")
         print("6. Realizar Transferência")
@@ -24,51 +97,15 @@ def menu():
         print("8. Consultar Dados da Conta")
         print("9. Sair")
 
-
         opcao = input("Escolha uma opção: ")
 
-
-        if opcao == "1":
-            opcaoConta = input('''Informe o tipo de conta:
-                1. Conta Simples
-                2. Conta Bônus
-                3. Conta Poupança
-            ''');
-            numero = input("Informe o número da conta: ")
-            saldoInicial = input("Informe saldo inicial para abrir a conta: ")
-            sistema.cadastrar_conta(numero, opcaoConta, saldoInicial)
-        elif opcao == "2":
-            numero = input("Informe o número da conta: ")
-            sistema.consultar_saldo(numero)
-        elif opcao == "3":
-            numero = input("Informe o número da conta: ")
-            sistema.consultar_pontuacao(numero)
-        elif opcao == "4":
-            numero = input("Informe o número da conta: ")
-            valor = float(input("Informe o valor do crédito: "))
-            sistema.realizar_credito(numero, valor)
-        elif opcao == "5":
-            numero = input("Informe o número da conta: ")
-            valor = float(input("Informe o valor do débito: "))
-            sistema.realizar_debito(numero, valor)
-        elif opcao == "6":
-            origem = input("Informe o número da conta de origem: ")
-            destino = input("Informe o número da conta de destino: ")
-            valor = float(input("Informe o valor da transferência: "))
-            sistema.realizar_transferencia(origem, destino, valor)
-        elif opcao == "7":
-            numero = input("Informe o número da conta: ")
-            taxa = input("Informe a taxa de juros: ")
-            sistema.render_juros(numero, taxa)
-        elif opcao == "8":
-            numero = input("Informe o número da conta: ")
-            sistema.consultar_dados_conta(numero)
+        if opcao in opcoes:
+            opcoes[opcao]()
         elif opcao == "9":
             print("Saindo do sistema...")
             break
         else:
             print("Opção inválida. Tente novamente.")
-
 
 if __name__ == "__main__":
     menu()
