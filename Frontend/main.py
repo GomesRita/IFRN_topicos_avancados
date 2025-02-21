@@ -21,8 +21,7 @@ def menu():
         print("5. Realizar Débito")
         print("6. Realizar Transferência")
         print("7. Render Juros")
-        print("8. Consultar Dados da Conta")
-        print("9. Sair")
+        print("8. Sair")
 
 
         opcao = input("Escolha uma opção: ")
@@ -61,9 +60,6 @@ def menu():
             taxa = input("Informe a taxa de juros: ")
             sistema.render_juros(numero, taxa)
         elif opcao == "8":
-            numero = input("Informe o número da conta: ")
-            sistema.consultar_dados_conta(numero)
-        elif opcao == "9":
             print("Saindo do sistema...")
             break
         else:

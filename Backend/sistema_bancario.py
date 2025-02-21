@@ -150,24 +150,3 @@ class SistemaBancario:
                 print("Sua conta não é do tipo conta bônus")
         else:
             print("Conta não encontrada.")
-
-    def consultar_dados_conta(self, numero):
-        conta = self.contas.get(numero)
-        if conta:
-            tipo_conta = 'Conta Simples'
-            if isinstance(conta, ContaBonus):
-                tipo_conta = 'Conta Bonus'
-            elif isinstance(conta, ContaPoupanca):
-                tipo_conta = 'Conta Poupança'
-
-            dados_conta = f"""
-            Tipo de Conta: {tipo_conta}
-            Número da Conta: {conta.numero}
-            Saldo: R${conta.saldo:.2f}
-            """
-            if isinstance(conta, ContaBonus):
-                dados_conta += f"Pontuação: {conta.pontuacao:.2f}"
-
-            print(dados_conta)
-        else:
-            print("Conta não encontrada.")
