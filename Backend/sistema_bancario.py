@@ -101,14 +101,17 @@ class SistemaBancario:
     def realizar_debito(self, numero, valor):
         conta = self.contas.get(numero)
 
-        if conta:
-            if conta.saldo < valor:
-                return 'Saldo insuficiente, operação cancelada'
-            else:
-                conta.saldo -= valor
-                return f"Débito de R${valor:.2f} realizado na conta {numero}."
-        else:
-            return "Conta não encontrada."
+        if not conta:
+             return "Conta não encontrada."
+        
+        if valor <= 0:
+            return "Valor inválido para débito. A operação foi cancelada."
+        
+        if conta.saldo < valor:
+            return "Saldo insuficiente, operação cancelada."
+        
+        conta.saldo -= valor
+        return f"Débito de R${valor:.2f} realizado na conta {numero}."
         
     def realizar_transferencia(self, origem, destino, valor):
         conta_origem = self.contas.get(origem)
