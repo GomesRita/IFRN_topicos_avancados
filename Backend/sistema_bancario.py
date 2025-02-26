@@ -101,40 +101,45 @@ class SistemaBancario:
     def realizar_debito(self, numero, valor):
         conta = self.contas.get(numero)
 
-        if not conta:
-             return "Conta não encontrada."
+        if conta:
+            if valor <= 0:  
+                return 'Valor inválido para débito. Operação cancelada.'
+            
+            if conta.saldo - valor < -1000:
+                return 'Limite de saldo negativo excedido. Operação cancelada.'
         
-        if valor <= 0:
-            return "Valor inválido para débito. A operação foi cancelada."
-        
-        if conta.saldo < valor:
-            return "Saldo insuficiente, operação cancelada."
-        
-        conta.saldo -= valor
-        return f"Débito de R${valor:.2f} realizado na conta {numero}."
+            conta.saldo -= valor
+            return f"Débito de R${valor:.2f} realizado na conta {numero}."
+        else:
+            return "Conta não encontrada."
         
     def realizar_transferencia(self, origem, destino, valor):
         conta_origem = self.contas.get(origem)
         conta_destino = self.contas.get(destino)
 
-
         if conta_origem and conta_destino:
-            if conta_origem.saldo < valor:
-                return 'Saldo insuficiente, operação cancelada'
-            else:
-                if isinstance(conta_destino, ContaBonus):
-                    conta_destino.somadorTransferencia += valor
-                    if conta_destino.somadorTransferencia >= 150:
-                        conta_destino.pontuacao +=valor // 150;
-                        conta_origem.saldo -= valor
-                        conta_destino.saldo += valor
-                        return f"Transferência de R${valor:.2f} realizada da conta {origem} para a conta {destino}."
-                else:
-                    conta_origem.saldo -= valor
-                    conta_destino.saldo += valor
-                    return f"Transferência de R${valor:.2f} realizada da conta {origem} para a conta {destino}."
+            if valor <= 0:  # Valida se o valor é positivo
+                return 'Valor inválido para transferência. Operação cancelada.'
+            
+            # Verifica se o saldo da conta de origem ficará abaixo do limite de -1000 após a transferência
+            if conta_origem.saldo - valor < -1000:
+                return 'Limite de saldo negativo excedido. Operação cancelada.'
+            
+            # Realiza a transferência
+            conta_origem.saldo -= valor  # Subtrai o valor da conta de origem
+            conta_destino.saldo += valor  # Adiciona o valor à conta de destino
+
+            # Atualiza a pontuação da conta de destino (se for ContaBonus)
+            if isinstance(conta_destino, ContaBonus):
+                conta_destino.somadorTransferencia += valor
+                if conta_destino.somadorTransferencia >= 150:
+                    conta_destino.pontuacao += 1  # Adiciona 1 ponto a cada 150 reais transferidos
+                    conta_destino.somadorTransferencia = 0  # Reinicia o somador
+
+            return f"Transferência de R${valor:.2f} realizada da conta {origem} para a conta {destino}."
         else:
             return "Conta de origem ou destino não encontrada."
+            
 
 
     def consultar_saldo(self, numero):
