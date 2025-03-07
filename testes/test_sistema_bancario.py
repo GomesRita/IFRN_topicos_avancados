@@ -64,9 +64,12 @@ def test_realizar_debito_valor_negativo():
 
 def test_realizar_debito_saldo_insuficiente():
     sistema = SistemaBancario()
-    sistema.cadastrar_conta("123", "1", 100.0)
-    sistema.realizar_debito("123", 150.0)
-    assert sistema.contas["123"].saldo == 100.0  # O saldo não deve mudar
+    sistema.cadastrar_conta("123", "1", 100.0)  
+    
+    resultado = sistema.realizar_debito("123", 1200.0)
+    
+    assert resultado == 'Limite de saldo negativo excedido. Operação cancelada.'
+    assert sistema.contas["123"].saldo == 100.0
 
 # Testes para Transferência
 def test_realizar_transferencia():
@@ -87,12 +90,15 @@ def test_realizar_transferencia_valor_negativo():
 
 def test_realizar_transferencia_bonus():
     sistema = SistemaBancario()
-    sistema.cadastrar_conta("123", "1", 100.0)  # Conta de origem
-    sistema.cadastrar_conta("456", "2", 50.0)   # Conta de destino (Bônus)
-    sistema.realizar_transferencia("123", "456", 150.0)
-    assert sistema.contas["123"].saldo == -50.0  # Saldo negativo (depende da lógica do sistema)
-    assert sistema.contas["456"].saldo == 200.0
-    assert sistema.contas["456"].pontuacao == 11  # 10 pontos iniciais + 1 ponto extra
+    sistema.cadastrar_conta("123", "1", 100.0)  
+    sistema.cadastrar_conta("456", "2", 50.0)   
+    
+    resultado = sistema.realizar_transferencia("123", "456", 1200.0)
+
+    assert resultado == 'Limite de saldo negativo excedido. Operação cancelada.'
+    assert sistema.contas["123"].saldo == 100.0
+    assert sistema.contas["456"].saldo == 50.0
+    assert sistema.contas["456"].pontuacao == 10
 
 # Testes para Render Juros
 def test_render_juros():
